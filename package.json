@@ -1,0 +1,45 @@
+{
+  "name": "mickofont",
+  "version": "1.0.0",
+  "description": "A highly-optimized CLI toolchain for converting SVG icons to web font formats (TTF, WOFF, WOFF2, EOT, SVG Symbol).",
+  "keywords": [
+    "svg",
+    "font",
+    "icon-font",
+    "svgtofont",
+    "cli",
+    "typescript"
+  ],
+  "main": "dist/cli/index.js",
+  "types": "dist/cli/index.d.ts",
+  "bin": {
+    "mickofont": "dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/cli/index.js make-font",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "mickofont.config.ts"
+  ],
+  "dependencies": {
+    "commander": "^12.1.0",
+    "lodash.merge": "^4.6.2",
+    "svgtofont": "^4.2.3"
+  },
+  "devDependencies": {
+    "@types/commander": "^2.12.5",
+    "@types/lodash.merge": "^4.6.9",
+    "@types/node": "^20.19.22",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "author": "Your Name",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  }
+}
