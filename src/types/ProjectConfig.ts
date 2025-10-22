@@ -22,6 +22,11 @@ export interface ProjectConfig {
     svgToFontOptions: SvgToFontOptions;
 }
 
+
+export type CLIConfig = Partial<ProjectConfig | {
+    configFilePath: string
+}>
+
 export type PartialProjectConfig = Partial<Omit<ProjectConfig, 'svgToFontOptions'>> & {
     svgToFontOptions?: Partial<SvgToFontOptions>
 };
