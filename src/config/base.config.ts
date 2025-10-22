@@ -8,6 +8,7 @@ const defaultSvgToFontOptions: SvgToFontOptions = {
     src: path.resolve(rootPath, 'svg'),
     dist: path.resolve(rootPath, 'fonts'),
     fontName: 'mickofont' as const,
+    classNamePrefix: "mk",
     css: true as const,
     emptyDist: false as const,
     generateInfoData: true as const,
