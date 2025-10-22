@@ -42,14 +42,13 @@ export async function checkPath(p: string): Promise<CheckResult> {
 }
 export async function validatePaths(
     srcPath: string | undefined,
-    distPath: string | undefined,
 ): Promise<boolean> {
-    if (!srcPath || !distPath) {
+    if (!srcPath ) {
         console.error("❌ Fatal Error: Source or distribution paths are not defined.");
         process.exit(1);
     }
 
-    const [srcInfo, distInfo] = await Promise.all([checkPath(srcPath), checkPath(distPath)]);
+    const [srcInfo] = await Promise.all([checkPath(srcPath)]);
 
     // Source checks
     if (!srcInfo.exists) {
@@ -67,25 +66,6 @@ export async function validatePaths(
     if (!srcInfo.isFile && !srcInfo.isDirectory) {
         console.error(`❌ Source exists but is neither a file nor a directory: ${srcInfo.path}`);
         process.exit(4);
-    }
-
-    // Dist checks
-    if (!distInfo.exists) {
-        console.error(`❌ Dist not found: ${path.resolve(distPath)}`);
-
-        console.error("➡ Fix: Run `init` to create output folders or correct the dist path.");
-        process.exit(6);
-
-    } else {
-        if (!distInfo.isDirectory) {
-            console.error(`❌ Dist exists but is not a directory: ${distInfo.path}`);
-            process.exit(7);
-        }
-        if (!distInfo.writable) {
-            console.error(`❌ Dist not writable: ${distInfo.path}`);
-            console.error("➡ Fix: Adjust output folder permissions (e.g. `chmod -R u+w <dist>` or change owner with `chown`).");
-            process.exit(8);
-        }
     }
 
     return true;

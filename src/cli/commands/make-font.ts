@@ -63,7 +63,7 @@ export const makeFontCommand = new Command('make-font')
             process.exit(1);
         }
 
-        await validatePaths(srcPath, distPath);
+        await validatePaths(srcPath);
 
 
         if (config.verbose) {
