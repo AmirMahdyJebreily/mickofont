@@ -40,33 +40,3 @@ export async function checkPath(p: string): Promise<CheckResult> {
 
     return res;
 }
-export async function validatePaths(
-    srcPath: string | undefined,
-): Promise<boolean> {
-    if (!srcPath ) {
-        console.error("❌ Fatal Error: Source or distribution paths are not defined.");
-        process.exit(1);
-    }
-
-    const [srcInfo] = await Promise.all([checkPath(srcPath)]);
-
-    // Source checks
-    if (!srcInfo.exists) {
-        console.error(`❌ Source not found: ${srcInfo.path}`);
-        console.error("➡ Fix: The source path does not exist. Run `init` to create project structure or fix the src path in your config.");
-        process.exit(2);
-    }
-
-    if (!srcInfo.readable) {
-        console.error(`❌ Source not readable: ${srcInfo.path}`);
-        console.error("➡ Fix: Check file/folder permissions or run the program with a user that has read access.");
-        process.exit(3);
-    }
-
-    if (!srcInfo.isFile && !srcInfo.isDirectory) {
-        console.error(`❌ Source exists but is neither a file nor a directory: ${srcInfo.path}`);
-        process.exit(4);
-    }
-
-    return true;
-}

@@ -3,10 +3,10 @@
 import { Command } from 'commander';
 import svgtofont from 'svgtofont';
 import { loadProjectConfig } from '../../config/loader';
-import { OptimizationLevel, ProjectConfig } from '../../types/ProjectConfig';
+import { CLIConfig, OptimizationLevel, ProjectConfig } from '../../types/ProjectConfig';
 // ✅ ایمپورت دقیق و مورد نیاز
 import { svgoFullConfig, svgoMidConfig } from '../../config/svgo.config';
-import { checkPath, validatePaths } from '../../utils/check-results';
+import { checkPath } from '../../utils/check-results';
 
 /**
  * Defines the main command to process SVGs and generate font files.
@@ -14,20 +14,21 @@ import { checkPath, validatePaths } from '../../utils/check-results';
  */
 export const makeFontCommand = new Command('make-font')
     .description('Processes SVG files and generates various font formats (TTF, WOFF, etc.).')
+    .option('-c, --config <file>', 'Path to the config file, TIP: use `init` command to build config file easy!.')
     .option('-s, --src <folder>', 'Override the source directory for SVG icons.')
     .option('-d, --dist <folder>', 'Override the output directory for font files.')
     .action(async (opts) => {
 
         // 1. Construct CLI overrides
-        const cliOverrides: Partial<ProjectConfig> = {
+        const cliOverrides: CLIConfig = {
             svgToFontOptions: {
                 src: opts.src,
                 dist: opts.dist,
-            }
+            },
         };
 
         // 2. Load the final configuration
-        const [config, error] = loadProjectConfig(cliOverrides);
+        const [config, error] = await loadProjectConfig(cliOverrides, opts.config);
 
         if (error || !config) {
             console.error('❌ Configuration Error:', error?.message || 'Failed to load project configuration.');
@@ -63,7 +64,6 @@ export const makeFontCommand = new Command('make-font')
             process.exit(1);
         }
 
-        await validatePaths(srcPath);
 
 
         if (config.verbose) {

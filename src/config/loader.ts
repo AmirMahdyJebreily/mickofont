@@ -1,23 +1,48 @@
-import { ProjectConfig, OptimizationLevel } from '../types/ProjectConfig';
+import { ProjectConfig, OptimizationLevel, CLIConfig } from '../types/ProjectConfig';
 import defaultConfig from './base.config';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { merge } from 'lodash';
+import { checkPath } from '../utils/check-results';
 
 
-export function loadProjectConfig(cliOptions: Partial<ProjectConfig> = {}): [ProjectConfig | null, Error | null] {
+export async function loadProjectConfig(cliOptions: CLIConfig = {}, confFilePath?: string): Promise<[ProjectConfig | null, Error | null]> {
     let finalConfig: ProjectConfig = defaultConfig;
 
-    const configFilePath = process.env.MICKOFONT_CONFIG_PATH || path.resolve(process.cwd(), 'mickofont.config.js');
+    const configFilePath = process.env.MICKOFONT_CONFIG_PATH || path.resolve(process.cwd(), confFilePath ?? "") || path.resolve(process.cwd(), 'mickofont.config.js');
 
     if (fs.existsSync(configFilePath)) {
         try {
             const projectConfig = require(configFilePath).default || require(configFilePath);
 
             finalConfig = merge({}, finalConfig, projectConfig);
+
+            const srcPath = finalConfig.svgToFontOptions.src
+
+            if (!srcPath) {
+                throw new Error("❌ Fatal Error: Source or distribution paths are not defined.");
+            }
+
+            const [srcInfo] = await Promise.all([checkPath(srcPath)]);
+
+            if (!srcInfo.exists) {
+                throw new Error(`❌ Source not found: ${srcInfo.path}\n➡ Fix: The source path does not exist. Run 'init' to create project structure or fix the src path in your config.`);
+            }
+
+            if (!srcInfo.readable) {
+                throw new Error(`❌ Source not readable: ${srcInfo.path}\n➡ Fix: Check file/folder permissions or run the program with a user that has read access.`);
+            }
+
+            if (!srcInfo.isFile && !srcInfo.isDirectory) {
+                throw new Error(`❌ Source exists but is neither a file nor a directory: ${srcInfo.path}`);
+            }
             console.log(`✅ Loaded config from project file: ${configFilePath}`);
+
+
+
         } catch (error) {
             console.warn(`⚠️ Could not load project config from ${configFilePath}. Using base configuration.`);
+
         }
     }
 
@@ -34,9 +59,6 @@ export function loadProjectConfig(cliOptions: Partial<ProjectConfig> = {}): [Pro
             return [null, err];
         }
     }
-
-    finalConfig = merge({}, finalConfig, cliOptions);
-
 
     return [finalConfig, null];
 }

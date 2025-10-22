@@ -3,7 +3,7 @@
 import { Command } from 'commander';
 import { makeFontCommand } from './commands/make-font';
 // import { cleanCommand } from './cli/commands/clean';
-// import { initCommand } from './cli/commands/init';
+import { initCommand } from './commands/init';
 
 const PACKAGE_VERSION = '1.0.0'; 
 const PACKAGE_DESCRIPTION = 'A CLI tool to process SVGs and generate font files';
@@ -19,7 +19,7 @@ function runCli() {
 
   program.addCommand(makeFontCommand);
   // program.addCommand(cleanCommand);
-  // program.addCommand(initCommand);
+  program.addCommand(initCommand);
 
   program.parse(process.argv);
 

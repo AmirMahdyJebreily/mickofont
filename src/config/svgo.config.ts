@@ -1,9 +1,3 @@
-// src/config/svgo.config.ts
-// ❌ import { Config, PluginConfig } from 'svgo'; // <-- حذف شد
-
-/**
- * SVGO configuration for aggressive optimization level (FULL).
- */
 export const svgoFullConfig = { // Type is inferred as 'const' object
   multipass: true, 
   
@@ -25,9 +19,7 @@ export const svgoFullConfig = { // Type is inferred as 'const' object
   ],
 };
 
-/**
- * SVGO configuration for moderate optimization level (MID).
- */
+
 export const svgoMidConfig = { // Type is inferred as 'const' object
   multipass: false, 
   
