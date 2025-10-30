@@ -1,4 +1,4 @@
-import { Config, Plugin, PluginConfig } from "svgo";
+import { Config, PluginConfig } from "svgo";
 
 export const svgoFullConfig: Config = {
   multipass: true,
@@ -11,6 +11,7 @@ export const svgoFullConfig: Config = {
           removeDimensions: true, 
           // 'removeViewBox' is true by default, so we disable it to keep it.
           removeViewBox: false, 
+          
         },
       },
     },

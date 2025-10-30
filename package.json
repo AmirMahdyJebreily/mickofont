@@ -28,10 +28,12 @@
   "dependencies": {
     "commander": "^12.1.0",
     "lodash.merge": "^4.6.2",
+    "svg-path-outline": "^1.0.1",
     "svgo": "^4.0.0",
     "svgtofont": "^4.2.3"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.35",
     "@types/commander": "^2.12.5",
     "@types/lodash.merge": "^4.6.9",
     "@types/node": "^20.19.22",

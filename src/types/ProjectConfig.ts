@@ -15,6 +15,7 @@ export enum OptimizationLevel {
 export interface ProjectConfig {
     optimizationLevel: OptimizationLevel;
     verbose: boolean;
+    strokeToFill: boolean
 
     /**
      * Official options object passed directly to the svgtofont library.

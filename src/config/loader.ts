@@ -8,9 +8,8 @@ import { checkPath } from '../utils/check-results';
 
 export async function loadProjectConfig(cliOptions: CLIConfig = {}, confFilePath?: string): Promise<[ProjectConfig | null, Error | null]> {
     let finalConfig: ProjectConfig = defaultConfig;
-
-    const configFilePath = process.env.MICKOFONT_CONFIG_PATH || path.resolve(process.cwd(), confFilePath ?? "") || path.resolve(process.cwd(), 'mickofont.config.js');
-
+    const confPathFromCLI = (confFilePath) ? path.resolve(process.cwd(), confFilePath) : ''
+    const configFilePath = process.env.MICKOFONT_CONFIG_PATH ||  confPathFromCLI || path.resolve(process.cwd(), 'mickofont.config.js');    
     if (fs.existsSync(configFilePath)) {
         try {
             const projectConfig = require(configFilePath).default || require(configFilePath);
@@ -42,7 +41,6 @@ export async function loadProjectConfig(cliOptions: CLIConfig = {}, confFilePath
 
         } catch (error) {
             console.warn(`⚠️ Could not load project config from ${configFilePath}. Using base configuration.`);
-
         }
     }
 

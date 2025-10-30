@@ -15,7 +15,7 @@ const defaultSvgToFontOptions: SvgToFontOptions = {
     // IMPORTANT
     svgicons2svgfont: {
         fontHeight: 1000 as const,
-        normalize: true as const,
+        normalize: false as const,
     } as const,
     svgoOptions: {
         multipass: true as const,
@@ -28,6 +28,7 @@ const defaultSvgToFontOptions: SvgToFontOptions = {
 const defaultConfig: ProjectConfig = {
     verbose: false,
     optimizationLevel: OptimizationLevel.FULL,
+    strokeToFill: false,
     svgToFontOptions: defaultSvgToFontOptions
 };
 

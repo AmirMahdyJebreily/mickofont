@@ -10,6 +10,8 @@ const PACKAGE_DESCRIPTION = 'A CLI tool to process SVGs and generate font files'
 
 
 function runCli() {
+  console.log('Program is starting...');
+  
   const program = new Command();
 
   program
