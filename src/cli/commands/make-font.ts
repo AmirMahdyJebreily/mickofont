@@ -35,26 +35,26 @@ export const makeFontCommand = new Command('make-font')
             process.exit(1);
         }
 
-        // 3. SVG Processing Pipeline: Apply SVGO Configuration based on OptimizationLevel
-        // switch (config.optimizationLevel) {
-        //     case OptimizationLevel.FULL:
-        //         // ✅ تزریق پیکربندی FULL (تهاجمی)
-        //         config.svgToFontOptions.svgoOptions = svgoFullConfig;
-        //         if (config.verbose) console.log('✅ Optimization level set to FULL (Aggressive SVGO).');
-        //         break;
+        //3. SVG Processing Pipeline: Apply SVGO Configuration based on OptimizationLevel
+        switch (config.optimizationLevel) {
+            case OptimizationLevel.FULL:
+                // ✅ تزریق پیکربندی FULL (تهاجمی)
+                config.svgToFontOptions.svgoOptions = svgoFullConfig;
+                if (config.verbose) console.log('✅ Optimization level set to FULL (Aggressive SVGO).');
+                break;
 
-        //     case OptimizationLevel.MID:
-        //         // ✅ تزریق پیکربندی MID (متعادل)
-        //         config.svgToFontOptions.svgoOptions = svgoMidConfig;
-        //         if (config.verbose) console.log('✅ Optimization level set to MID (Moderate SVGO).');
-        //         break;
+            case OptimizationLevel.MID:
+                // ✅ تزریق پیکربندی MID (متعادل)
+                config.svgToFontOptions.svgoOptions = svgoMidConfig;
+                if (config.verbose) console.log('✅ Optimization level set to MID (Moderate SVGO).');
+                break;
 
-        //     case OptimizationLevel.NONE:
-        //         // ✅ غیرفعال کردن SVGO
-        //         config.svgToFontOptions.svgoOptions = undefined; 
-        //         if (config.verbose) console.log('⚠️ Optimization (SVGO) disabled.');
-        //         break;
-        // }
+            case OptimizationLevel.NONE:
+                // ✅ غیرفعال کردن SVGO
+                config.svgToFontOptions.svgoOptions = undefined; 
+                if (config.verbose) console.log('⚠️ Optimization (SVGO) disabled.');
+                break;
+        }
 
         const srcPath = config.svgToFontOptions.src;
         const distPath = config.svgToFontOptions.dist;

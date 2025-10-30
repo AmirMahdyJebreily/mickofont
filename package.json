@@ -38,6 +38,9 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
+  "overrides": {
+    "svgo": "^4.0.0"
+  },
   "author": "Your Name",
   "license": "ISC",
   "publishConfig": {
