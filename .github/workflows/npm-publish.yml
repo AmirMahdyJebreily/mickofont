@@ -1,0 +1,43 @@
+# This is a GitHub Actions workflow file.
+# It defines a job that will automatically publish your package to npm.
+# This workflow is triggered *only* when you create a new "published" release on GitHub.
+
+name: Publish Package to npm
+
+on:
+  release:
+    types: [published] # Runs only when a release is published in GitHub
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest # Use the latest Ubuntu runner
+    steps:
+      # 1. Check out your repository's code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Node.js. Using version 20, a stable LTS release.
+      #    It also configures the .npmrc file to use the npm registry.
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org/'
+
+      # 3. Install dependencies.
+      #    'npm ci' is recommended for CI as it's faster and uses package-lock.json
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Run your build script (as defined in package.json: "build": "tsc")
+      #    This generates the required 'dist' directory for publishing.
+      - name: Build package
+        run: npm run build
+
+      # 5. Publish the package to npm.
+      #    It uses the NODE_AUTH_TOKEN environment variable, which is set
+      #    from the NPM_TOKEN secret you need to create in your repo.
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
