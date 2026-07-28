@@ -4,6 +4,7 @@ import { loadProjectConfig } from '../../config/loader';
 import { CLIConfig, OptimizationLevel } from '../../types/ProjectConfig';
 import { svgoFullConfig, svgoMidConfig } from '../../config/svgo.config';
 import { processSvgDirectory } from '../../utils/strike-to-fill';
+import { generateTypeScriptEnums } from '../../utils/generate-ts-enums';
 
 /**
  * Defines the main command to process SVGs and generate font files.
@@ -85,6 +86,18 @@ export const makeFontCommand = new Command('make-font')
 
             await svgtofont(config.svgToFontOptions);
 
+            // Generate TypeScript enums/union types if enabled
+            if (config.typeScript.enabled) {
+                const prefix = config.typeScript.includePrefix ? config.svgToFontOptions.classNamePrefix : undefined;
+                await generateTypeScriptEnums(
+                    srcPath,
+                    config.typeScript.outputFile,
+                    config.typeScript.exportName,
+                    config.typeScript.exportType,
+                    prefix,
+                    config.verbose
+                );
+            }
 
             console.log(`\n🎉 Success: Font files generated in ${distPath}`);
 

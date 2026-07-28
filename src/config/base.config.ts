@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { ProjectConfig, OptimizationLevel } from '../types/ProjectConfig';
+import { ProjectConfig, OptimizationLevel, TypeScriptExportType } from '../types/ProjectConfig';
 import { SvgToFontOptions } from 'svgtofont';
 
 const rootPath = process.cwd();
@@ -29,6 +29,13 @@ const defaultConfig: ProjectConfig = {
     verbose: false,
     optimizationLevel: OptimizationLevel.FULL,
     strokeToFill: false,
+    typeScript: {
+        enabled: false,
+        exportType: TypeScriptExportType.UNION,
+        exportName: 'IconName',
+        outputFile: path.resolve(rootPath, 'src', 'types', 'IconNames.ts'),
+        includePrefix: false,
+    },
     svgToFontOptions: defaultSvgToFontOptions
 };
 
