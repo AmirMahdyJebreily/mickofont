@@ -84,13 +84,15 @@ export const makeFontCommand = new Command('make-font')
                 config!.svgToFontOptions.src = processedSvgPath;
             }
 
+            const effectiveSrcPath = config.svgToFontOptions.src as string;
+
             await svgtofont(config.svgToFontOptions);
 
             // Generate TypeScript enums/union types if enabled
             if (config.typeScript.enabled) {
                 const prefix = config.typeScript.includePrefix ? config.svgToFontOptions.classNamePrefix : undefined;
                 await generateTypeScriptEnums(
-                    srcPath,
+                    effectiveSrcPath,
                     config.typeScript.outputFile,
                     config.typeScript.exportName,
                     config.typeScript.exportType,

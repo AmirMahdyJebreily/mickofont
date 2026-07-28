@@ -141,3 +141,4 @@ vite.config.ts.timestamp-*
 # Mikofont tests
 icons/
 mickofont.config.js
+mickofont.test.config.js

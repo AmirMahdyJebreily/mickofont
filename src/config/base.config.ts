@@ -30,11 +30,11 @@ const defaultConfig: ProjectConfig = {
     optimizationLevel: OptimizationLevel.FULL,
     strokeToFill: false,
     typeScript: {
-        enabled: false,
+        enabled: true,
         exportType: TypeScriptExportType.UNION,
         exportName: 'IconName',
-        outputFile: path.resolve(rootPath, 'src', 'types', 'IconNames.ts'),
-        includePrefix: false,
+        outputFile: path.resolve(rootPath, 'types', 'IconNames.ts'),
+        includePrefix: true,
     },
     svgToFontOptions: defaultSvgToFontOptions
 };
