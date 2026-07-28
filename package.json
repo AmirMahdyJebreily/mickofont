@@ -1,6 +1,6 @@
 {
   "name": "mickofont",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "A highly-optimized CLI toolchain for converting SVG icons to web font formats (TTF, WOFF, WOFF2, EOT, SVG Symbol).",
   "keywords": [
     "svg",
@@ -43,7 +43,7 @@
   "overrides": {
     "svgo": "^4.0.0"
   },
-  "author": "Your Name",
+  "author": "CodeAgha",
   "license": "ISC",
   "publishConfig": {
     "access": "public"

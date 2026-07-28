@@ -1,11 +1,13 @@
+#!/usr/bin/env node
 // src/index.ts
+
 
 import { Command } from 'commander';
 import { makeFontCommand } from './commands/make-font';
 import { cleanCommand } from './commands/clean';
 import { initCommand } from './commands/init';
 
-const PACKAGE_VERSION = '1.1.5'; 
+const PACKAGE_VERSION = '1.1.6'; 
 const PACKAGE_DESCRIPTION = 'A CLI tool to process SVGs and generate font files';
 
 
@@ -13,6 +15,8 @@ function runCli() {
   console.log('Program is starting...');
   
   const program = new Command();
+
+
 
   program
     .name('mickofont')
