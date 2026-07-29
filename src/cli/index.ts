@@ -7,7 +7,7 @@ import { makeFontCommand } from './commands/make-font';
 import { cleanCommand } from './commands/clean';
 import { initCommand } from './commands/init';
 
-const PACKAGE_VERSION = '1.1.9'; 
+const PACKAGE_VERSION = '1.1.10'; 
 const PACKAGE_DESCRIPTION = 'A CLI tool to process SVGs and generate font files';
 
 
