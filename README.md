@@ -195,7 +195,7 @@ my-project/
 │ ├── svg/ # your raw SVG icons (input)
 │ ├── fonts/ # generated font files + CSS (output)
 │ └── types/
-│ └── IconNames.ts # generated TypeScript icon name type
+│       └── IconNames.ts # generated TypeScript icon name type
 ├── mickofont.config.js
 └── package.json
 ```
