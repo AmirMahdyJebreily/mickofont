@@ -216,4 +216,4 @@ my-project/
 
 ## License
 
-ISC © [CodeAgha](https://github.com/AmirMahdyJebreily/mickofont)
+BSD3-Clause © [CodeAgha](https://github.com/AmirMahdyJebreily/mickofont)
