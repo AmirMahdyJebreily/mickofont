@@ -10,6 +10,19 @@ interface IconName {
     cssClass: string; // kebab-case with optional prefix
 }
 
+
+const toCamelCaseRobust = (str: string): string => {
+  const words = str.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g) || [];
+
+  return words
+    .map((word, index) => {
+      if (index === 0) return word.toLowerCase();
+      
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    })
+    .join('');
+};
+
 /**
  * Extracts icon names from SVG files in a directory.
  * Returns both camelCase and CSS class name formats.
@@ -27,7 +40,7 @@ function getIconNamesFromDirectory(svgDirectory: string, prefix?: string): IconN
             let name = file.replace(/\.svg$/, '');
             
             // camelCase version (for enum keys)
-            let camelCaseName = name.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase());
+            let camelCaseName = toCamelCaseRobust(name);
             if (!/^[a-zA-Z_]/.test(camelCaseName)) {
                 camelCaseName = '_' + camelCaseName;
             }
