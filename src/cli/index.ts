@@ -7,16 +7,14 @@ import { makeFontCommand } from './commands/make-font';
 import { cleanCommand } from './commands/clean';
 import { initCommand } from './commands/init';
 
-const PACKAGE_VERSION = '1.1.6'; 
+const PACKAGE_VERSION = '1.1.9'; 
 const PACKAGE_DESCRIPTION = 'A CLI tool to process SVGs and generate font files';
 
 
 function runCli() {
-  console.log('Program is starting...');
+  console.log('MICKOFONT (by codeagha : https://github.com/AmirMahdyJebreily/mickofont)');
   
   const program = new Command();
-
-
 
   program
     .name('mickofont')
