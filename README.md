@@ -188,3 +188,32 @@ module.exports = {
 | `MICKOFONT_CONFIG_PATH` | Overrides the config file path for all commands, taking priority over `--config` and the default `mickofont.config.js` lookup. |
 
 ## Recommended Project Structure
+
+```
+my-project/
+├── icons/
+│ ├── svg/ # your raw SVG icons (input)
+│ ├── fonts/ # generated font files + CSS (output)
+│ └── types/
+│ └── IconNames.ts # generated TypeScript icon name type
+├── mickofont.config.js
+└── package.json
+```
+
+
+## Typical Workflow
+
+1. Run `mickofont init` once per project to scaffold config and folders.
+2. Add your `.svg` icon files into the configured `src` folder.
+3. Run `mickofont make-font` every time you add/update icons.
+4. Import the generated CSS and, optionally, the generated `IconName` type in your frontend project for type-safe icon usage.
+5. Run `mickofont clean` if you need to regenerate everything from scratch.
+
+## Notes & Known Limitations
+
+- The `strokeToFill` option is still under active development; unexpected behavior is possible on complex stroke-based SVGs.
+- `svgToFontOptions` accepts the full option set supported by the underlying `svgtofont` library, so advanced users can pass any additional `svgtofont` option (e.g. website preview generation, custom SVG font info) directly in their config.
+
+## License
+
+ISC © [CodeAgha](https://github.com/AmirMahdyJebreily/mickofont)
