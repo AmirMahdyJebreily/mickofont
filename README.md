@@ -20,7 +20,7 @@ A highly-optimized CLI toolchain for converting SVG icons into web font formats 
 ### Local (project dependency)
 
 ```bash
-npm i mickofont@latest
+npm i mickofont@latest -D
 ```
 
 ### Global (recommended for CLI usage anywhere)
