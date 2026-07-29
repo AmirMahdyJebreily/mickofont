@@ -1,4 +1,4 @@
-# mickofont
+# Mickofont
 
 A highly-optimized CLI toolchain for converting SVG icons into web font formats (TTF, WOFF, WOFF2, EOT, SVG Symbol), with optional TypeScript icon-name generation.
 
