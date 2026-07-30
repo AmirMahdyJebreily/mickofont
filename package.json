@@ -26,11 +26,11 @@
     "mickofont.config.ts"
   ],
   "dependencies": {
-    "commander": "^12.1.0",
+    "commander": "^15.0.0",
     "lodash.merge": "^4.6.2",
     "svg-path-outline": "^1.0.1",
     "svgo": "^4.0.0",
-    "svgtofont": "^4.2.3"
+    "svgtofont": "^6.5.3"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.35",
