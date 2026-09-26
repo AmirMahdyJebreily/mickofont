@@ -8,7 +8,7 @@ import { makeFontOnlyCommand } from "./commands/make-font-only";
 import { cleanCommand } from "./commands/clean";
 import { initCommand } from "./commands/init";
 
-const PACKAGE_VERSION = "1.2.14";
+const PACKAGE_VERSION = "1.2.15";
 const PACKAGE_DESCRIPTION =
   "A CLI tool to process SVGs and generate font files";
 
