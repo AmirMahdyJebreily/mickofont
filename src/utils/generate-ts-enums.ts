@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { TypeScriptExportType } from '../types/ProjectConfig';
+import { camelCase, kebabCase } from 'change-case';
 
 /**
  * Icon name representation with both camelCase and CSS class formats
@@ -10,18 +11,6 @@ interface IconName {
     cssClass: string; // kebab-case with optional prefix
 }
 
-
-const toCamelCaseRobust = (str: string): string => {
-  const words = str.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g) || [];
-
-  return words
-    .map((word, index) => {
-      if (index === 0) return word.toLowerCase();
-      
-      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-    })
-    .join('');
-};
 
 /**
  * Extracts icon names from SVG files in a directory.
@@ -40,13 +29,13 @@ function getIconNamesFromDirectory(svgDirectory: string, prefix?: string): IconN
             let name = file.replace(/\.svg$/, '');
             
             // camelCase version (for enum keys)
-            let camelCaseName = toCamelCaseRobust(name);
+            let camelCaseName = camelCase(name);
             if (!/^[a-zA-Z_]/.test(camelCaseName)) {
                 camelCaseName = '_' + camelCaseName;
             }
 
             // CSS class version (kebab-case with prefix)
-            let cssClassName = name;
+            let cssClassName = kebabCase(name);
             if (prefix) {
                 cssClassName = prefix + '-' + cssClassName;
             }
