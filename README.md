@@ -83,6 +83,7 @@ Processes the SVG icons and generates the font files (TTF, WOFF, WOFF2, EOT, SVG
 | `-s, --src <path>` | Override the source SVG directory from the config. |
 | `-d, --dist <path>` | Override the output directory from the config. |
 | `--optimization-level <level>` | Override the SVGO optimization level (`full`, `mid`, `none`). |
+| `--use-default` | Use default config without asking if config is missing. |
 
 Example:
 
@@ -97,6 +98,28 @@ What happens under the hood:
 3. If `strokeToFill` is enabled, stroke-based SVGs are converted to filled paths first (experimental).
 4. `svgtofont` generates TTF/WOFF/WOFF2/EOT/SVG Symbol font files plus a CSS file in your dist folder.
 5. If TypeScript generation is enabled, a union type or enum of icon names is written to the configured output file.
+
+### `mickofont make-type`
+
+Generates only the TypeScript types (enum or union), bypassing font generation completely.
+
+| Option | Description |
+|---|---|
+| `-c, --config <path>` | Path to a custom config file. |
+| `-s, --src <path>` | Override the source SVG directory from the config. |
+| `--use-default` | Use default config without asking if config is missing. |
+
+### `mickofont make-font-only`
+
+Processes the SVG icons and generates the font files (TTF, WOFF, WOFF2, EOT, SVG Symbol) without generating TypeScript types.
+
+| Option | Description |
+|---|---|
+| `-c, --config <path>` | Path to a custom config file. |
+| `-s, --src <path>` | Override the source SVG directory from the config. |
+| `-d, --dist <path>` | Override the output directory from the config. |
+| `--optimization-level <level>` | Override the SVGO optimization level (`full`, `mid`, `none`). |
+| `--use-default` | Use default config without asking if config is missing. |
 
 ### `mickofont clean`
 
