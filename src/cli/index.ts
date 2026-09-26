@@ -4,6 +4,8 @@
 
 import { Command } from 'commander';
 import { makeFontCommand } from './commands/make-font';
+import { makeTypeCommand } from './commands/make-type';
+import { makeFontOnlyCommand } from './commands/make-font-only';
 import { cleanCommand } from './commands/clean';
 import { initCommand } from './commands/init';
 
@@ -22,6 +24,8 @@ function runCli() {
     .version(PACKAGE_VERSION, '-v, --version', 'Output the current version of mickofont');
 
   program.addCommand(makeFontCommand);
+  program.addCommand(makeTypeCommand);
+  program.addCommand(makeFontOnlyCommand);
   program.addCommand(cleanCommand);
   program.addCommand(initCommand);
 
