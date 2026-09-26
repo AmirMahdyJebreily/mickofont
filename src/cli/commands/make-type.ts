@@ -8,6 +8,7 @@ export const makeTypeCommand = new Command('make-type')
     .description('Generates only the TypeScript types (bypassing font generation).')
     .option('-c, --config <file>', 'Path to the config file.')
     .option('-s, --src <folder>', 'Override the source directory for SVG icons.')
+    .option('--use-default', 'Use default config without asking if config is missing')
     .action(async (opts) => {
         console.log('make-type command registered...');
 
@@ -17,10 +18,15 @@ export const makeTypeCommand = new Command('make-type')
             },
         };
 
-        const [config, error] = await loadProjectConfig(cliOverrides, opts.config);
+        const [config, error] = await loadProjectConfig(cliOverrides, opts.config, opts.useDefault);
 
         if (error || !config) {
             console.error('❌ Configuration Error:', error?.message || 'Failed to load project configuration.');
+            process.exit(1);
+        }
+
+        if (!config.typeScript) {
+            console.error('❌ Type Generation Failed: typeScript configuration is missing.');
             process.exit(1);
         }
 
@@ -30,15 +36,24 @@ export const makeTypeCommand = new Command('make-type')
         }
 
         try {
-            if (config.strokeToFill) {
-                console.warn("-----------------------------\n\n🚫🚫🚫 Danger, the 'strokeToFill' option is under develop for now. any unexpected behavior is possible...\n-----------------------------\n\n");
-                const originalSvgPath = config!.svgToFontOptions.src!;
-                const processedSvgPath = await processSvgDirectory(originalSvgPath);
-                config!.svgToFontOptions.src = processedSvgPath;
+            let effectiveSrcPath = opts.src; // Default to src if we can't find it in config
+
+            if (config.svgToFontOptions) {
+                if (config.strokeToFill) {
+                    console.warn("-----------------------------\n\n🚫🚫🚫 Danger, the 'strokeToFill' option is under develop for now. any unexpected behavior is possible...\n-----------------------------\n\n");
+                    const originalSvgPath = config.svgToFontOptions.src!;
+                    const processedSvgPath = await processSvgDirectory(originalSvgPath);
+                    config.svgToFontOptions.src = processedSvgPath;
+                }
+                effectiveSrcPath = config.svgToFontOptions.src as string;
             }
 
-            const effectiveSrcPath = config.svgToFontOptions.src as string;
-            const prefix = config.typeScript.includePrefix ? config.svgToFontOptions.classNamePrefix : undefined;
+            if (!effectiveSrcPath) {
+                console.error('❌ Fatal Error: Source path is not defined for type generation.');
+                process.exit(1);
+            }
+
+            const prefix = config.typeScript.includePrefix && config.svgToFontOptions ? config.svgToFontOptions.classNamePrefix : undefined;
 
             await generateTypeScriptEnums(
                 effectiveSrcPath,

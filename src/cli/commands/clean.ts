@@ -49,15 +49,22 @@ export const cleanCommand = new Command('clean')
 		const cwd = process.cwd();
 		const config = loadConfigForClean(cwd, opts.config);
 
-		const distPath = resolveTargetPath(cwd, config.svgToFontOptions.dist as string);
-		const typesOutputPath = resolveTargetPath(cwd, config.typeScript.outputFile);
-		const typesDir = path.dirname(typesOutputPath);
+		const targets: string[] = [];
 
-		const targets = [...new Set([distPath, typesDir])];
+		if (config.svgToFontOptions?.dist) {
+			targets.push(resolveTargetPath(cwd, config.svgToFontOptions.dist as string));
+		}
+
+		if (config.typeScript?.outputFile) {
+			const typesOutputPath = resolveTargetPath(cwd, config.typeScript.outputFile);
+			targets.push(path.dirname(typesOutputPath));
+		}
+
+		const uniqueTargets = [...new Set(targets)];
 		let removedCount = 0;
 
 		try {
-			for (const target of targets) {
+			for (const target of uniqueTargets) {
 				const removed = await removeDirIfExists(target, Boolean(opts.verbose || config.verbose));
 				if (removed) {
 					removedCount++;

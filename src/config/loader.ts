@@ -4,9 +4,11 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { merge } from 'lodash';
 import { checkPath } from '../utils/check-results';
+import * as readline from 'node:readline/promises';
+import { stdin as input, stdout as output } from 'node:process';
 
 
-export async function loadProjectConfig(cliOptions: CLIConfig = {}, confFilePath?: string): Promise<[ProjectConfig | null, Error | null]> {
+export async function loadProjectConfig(cliOptions: CLIConfig = {}, confFilePath?: string, useDefault: boolean = false): Promise<[ProjectConfig | null, Error | null]> {
     let finalConfig: ProjectConfig = defaultConfig;
     const confPathFromCLI = (confFilePath) ? path.resolve(process.cwd(), confFilePath) : ''
     const configFilePath = process.env.MICKOFONT_CONFIG_PATH ||  confPathFromCLI || path.resolve(process.cwd(), 'mickofont.config.js');    
@@ -14,26 +16,60 @@ export async function loadProjectConfig(cliOptions: CLIConfig = {}, confFilePath
         try {
             const projectConfig = require(configFilePath).default || require(configFilePath);
 
-            finalConfig = merge({}, finalConfig, projectConfig);
+            const isSvgToFontMissing = projectConfig.svgToFontOptions === undefined || projectConfig.svgToFontOptions === null;
+            const isTypeScriptMissing = projectConfig.typeScript === undefined || projectConfig.typeScript === null;
 
-            const srcPath = finalConfig.svgToFontOptions.src
+            if (isSvgToFontMissing || isTypeScriptMissing) {
+                if (!useDefault) {
+                    const rl = readline.createInterface({ input, output });
+                    
+                    if (isSvgToFontMissing) {
+                        const answer = await rl.question('⚠️  svgToFontOptions is missing in your config. Do you want to use the default configuration? (y/N): ');
+                        if (answer.toLowerCase() !== 'y') {
+                            projectConfig.svgToFontOptions = null;
+                        } else {
+                            projectConfig.svgToFontOptions = defaultConfig.svgToFontOptions;
+                        }
+                    }
 
-            if (!srcPath) {
-                throw new Error("❌ Fatal Error: Source or distribution paths are not defined.");
+                    if (isTypeScriptMissing) {
+                        const answer = await rl.question('⚠️  typeScript configuration is missing in your config. Do you want to use the default configuration? (y/N): ');
+                        if (answer.toLowerCase() !== 'y') {
+                            projectConfig.typeScript = null;
+                        } else {
+                            projectConfig.typeScript = defaultConfig.typeScript;
+                        }
+                    }
+
+                    rl.close();
+                } else {
+                    if (isSvgToFontMissing) projectConfig.svgToFontOptions = defaultConfig.svgToFontOptions;
+                    if (isTypeScriptMissing) projectConfig.typeScript = defaultConfig.typeScript;
+                }
             }
 
-            const [srcInfo] = await Promise.all([checkPath(srcPath)]);
+            finalConfig = merge({}, finalConfig, projectConfig, cliOptions);
 
-            if (!srcInfo.exists) {
-                throw new Error(`❌ Source not found: ${srcInfo.path}\n➡ Fix: The source path does not exist. Run 'init' to create project structure or fix the src path in your config.`);
-            }
+            if (finalConfig.svgToFontOptions) {
+                const srcPath = finalConfig.svgToFontOptions.src
 
-            if (!srcInfo.readable) {
-                throw new Error(`❌ Source not readable: ${srcInfo.path}\n➡ Fix: Check file/folder permissions or run the program with a user that has read access.`);
-            }
+                if (!srcPath) {
+                    throw new Error("❌ Fatal Error: Source or distribution paths are not defined.");
+                }
 
-            if (!srcInfo.isFile && !srcInfo.isDirectory) {
-                throw new Error(`❌ Source exists but is neither a file nor a directory: ${srcInfo.path}`);
+                const [srcInfo] = await Promise.all([checkPath(srcPath)]);
+
+                if (!srcInfo.exists) {
+                    throw new Error(`❌ Source not found: ${srcInfo.path}\n➡ Fix: The source path does not exist. Run 'init' to create project structure or fix the src path in your config.`);
+                }
+
+                if (!srcInfo.readable) {
+                    throw new Error(`❌ Source not readable: ${srcInfo.path}\n➡ Fix: Check file/folder permissions or run the program with a user that has read access.`);
+                }
+
+                if (!srcInfo.isFile && !srcInfo.isDirectory) {
+                    throw new Error(`❌ Source exists but is neither a file nor a directory: ${srcInfo.path}`);
+                }
             }
             console.log(`✅ Loaded config from project file: ${configFilePath}`);
 

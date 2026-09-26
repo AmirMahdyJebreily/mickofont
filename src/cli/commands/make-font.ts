@@ -16,6 +16,7 @@ export const makeFontCommand = new Command('make-font')
     .option('-s, --src <folder>', 'Override the source directory for SVG icons.')
     .option('-d, --dist <folder>', 'Override the output directory for font files.')
     .option('--optimization-level <full,mid,none>', 'set optimization levels, recomended to use `mid`')
+    .option('--use-default', 'Use default config without asking if config is missing')
     .action(async (opts) => {
 
         console.log('make-font command registered...');
@@ -31,10 +32,15 @@ export const makeFontCommand = new Command('make-font')
         };
 
         // 2. Load the final configuration
-        const [config, error] = await loadProjectConfig(cliOverrides, opts.config);
+        const [config, error] = await loadProjectConfig(cliOverrides, opts.config, opts.useDefault);
 
         if (error || !config) {
             console.error('❌ Configuration Error:', error?.message || 'Failed to load project configuration.');
+            process.exit(1);
+        }
+
+        if (!config.svgToFontOptions) {
+            console.error('❌ Font Generation Failed: svgToFontOptions configuration is missing or disabled.');
             process.exit(1);
         }
 
@@ -89,7 +95,7 @@ export const makeFontCommand = new Command('make-font')
             await svgtofont(config.svgToFontOptions);
 
             // Generate TypeScript enums/union types if enabled
-            if (config.typeScript.enabled) {
+            if (config.typeScript?.enabled) {
                 const prefix = config.typeScript.includePrefix ? config.svgToFontOptions.classNamePrefix : undefined;
                 await generateTypeScriptEnums(
                     effectiveSrcPath,

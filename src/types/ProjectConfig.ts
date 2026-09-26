@@ -35,12 +35,12 @@ export interface ProjectConfig {
     optimizationLevel: OptimizationLevel;
     verbose: boolean;
     strokeToFill: boolean
-    typeScript: TypeScriptConfig;
+    typeScript?: TypeScriptConfig | null;
 
     /**
      * Official options object passed directly to the svgtofont library.
      */
-    svgToFontOptions: SvgToFontOptions;
+    svgToFontOptions?: SvgToFontOptions | null;
 }
 
 
